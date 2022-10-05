@@ -185,12 +185,12 @@ def pregunta_10():
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
     tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
-    tbl = tbl0.filter(items=('_c1','_c3'))
-    tbl = tbl0.sort_values('_c2')
-    tbl['_c2'] = tbl['_c2'].astype(str)
-    tbl = tbl.groupby('_c1').agg({'_c2':':'.join})
+    x = tbl0.filter(items=('_c1','_c3'))
+    x = tbl0.sort_values('_c2')
+    x['_c2'] = x['_c2'].astype(str)
+    x = x.groupby('_c1').agg({'_c2':':'.join})
 
-    return tbl
+    return x
 
 
 def pregunta_11():
