@@ -184,8 +184,6 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-
-    k = tbl0.filter(items=('_c1','_c3'))
     k = tbl0.sort_values('_c2')
     k['_c2'] = k['_c2'].astype(str)
     k = k.groupby('_c1').agg({'_c2':':'.join})
