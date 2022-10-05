@@ -170,7 +170,7 @@ def pregunta_09():
     return tbl0
 
 def pregunta_10():
-    
+
     """
     Construya una tabla que contenga _c1 y una lista separada por ':' de los valores de
     la columna _c2 para el archivo `tbl0.tsv`.
@@ -184,11 +184,13 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-    tbl0_a = tbl0[['_c1','_c2']]
-    tbl0 = tbl0_a.groupby(['_c1']).agg({'_c2': lambda x: sorted(x.tolist(),reverse=False)})
-    tbl0['_c2']=[':'.join(map(str, e)) for e in tbl0['_c2']]
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
+    tbl = tbl0.filter(items=('_c1','_c3'))
+    tbl = tbl0.sort_values('_c2')
+    tbl['_c2'] = tbl['_c2'].astype(str)
+    tbl = tbl.groupby('_c1').agg({'_c2':':'.join})
 
-    return tbl0
+    return tbl
 
 
 def pregunta_11():
