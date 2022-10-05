@@ -166,9 +166,11 @@ def pregunta_09():
     """
     tbl0['year'] = tbl0['_c3'].str.slice(0,4) # inicia0 termina 4
 
+
     return tbl0
 
 def pregunta_10():
+    
     """
     Construya una tabla que contenga _c1 y una lista separada por ':' de los valores de
     la columna _c2 para el archivo `tbl0.tsv`.
