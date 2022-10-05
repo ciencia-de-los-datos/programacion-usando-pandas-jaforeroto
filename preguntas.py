@@ -9,6 +9,7 @@ Utilice los archivos `tbl0.tsv`, `tbl1.tsv` y `tbl2.tsv`, para resolver las preg
 """
 import pandas as pd
 
+
 tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
 tbl1 = pd.read_csv("tbl1.tsv", sep="\t")
 tbl2 = pd.read_csv("tbl2.tsv", sep="\t")
@@ -22,7 +23,10 @@ def pregunta_01():
     40
 
     """
-    return
+
+    num_filas = tbl0.shape[0]
+
+    return num_filas
 
 
 def pregunta_02():
@@ -33,7 +37,9 @@ def pregunta_02():
     4
 
     """
-    return
+    num_columnas = tbl0.shape[1]
+
+    return num_columnas
 
 
 def pregunta_03():
@@ -50,7 +56,9 @@ def pregunta_03():
     Name: _c1, dtype: int64
 
     """
-    return
+    columna1 = tbl0.groupby(['_c1'])['_c1'].count()
+    
+    return columna1
 
 
 def pregunta_04():
@@ -65,7 +73,9 @@ def pregunta_04():
     E    4.785714
     Name: _c2, dtype: float64
     """
-    return
+    promedio = tbl0.groupby(['_c1'])['_c2'].mean()
+
+    return promedio
 
 
 def pregunta_05():
@@ -82,8 +92,9 @@ def pregunta_05():
     E    9
     Name: _c2, dtype: int64
     """
-    return
+    valor_maximo=tbl0.groupby(['_c1'])['_c2'].max()
 
+    return valor_maximo
 
 def pregunta_06():
     """
@@ -94,7 +105,9 @@ def pregunta_06():
     ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
     """
-    return
+    letras = sorted(tbl1['_c4'].str.upper().drop_duplicates())
+    
+    return letras
 
 
 def pregunta_07():
@@ -110,7 +123,10 @@ def pregunta_07():
     E    67
     Name: _c2, dtype: int64
     """
-    return
+    sumac2 = tbl0.groupby(['_c1'])['_c2'].sum()
+
+
+    return sumac2
 
 
 def pregunta_08():
@@ -128,7 +144,9 @@ def pregunta_08():
     39   39   E    5  1998-01-26    44
 
     """
-    return
+    tbl0['suma'] = tbl0['_c0']+tbl0['_c2']
+
+    return tbl0
 
 
 def pregunta_09():
@@ -146,10 +164,13 @@ def pregunta_09():
     39   39   E    5  1998-01-26  1998
 
     """
-    return
+    tbl0['year'] = tbl0['_c3'].str.slice(0,4) # inicia0 termina 4
 
+
+    return tbl0
 
 def pregunta_10():
+
     """
     Construya una tabla que contenga _c1 y una lista separada por ':' de los valores de
     la columna _c2 para el archivo `tbl0.tsv`.
@@ -163,7 +184,11 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-    return
+    k = tbl0.sort_values('_c2')
+    k['_c2'] = k['_c2'].astype(str)
+    k = k.groupby('_c1').agg({'_c2':':'.join})
+
+    return k
 
 
 def pregunta_11():
@@ -182,7 +207,11 @@ def pregunta_11():
     38   38      d,e
     39   39    a,d,f
     """
-    return
+    tbl0_b=pd.DataFrame(tbl1)
+    tbl=tbl0_b.groupby(['_c0'],as_index=False).agg({'_c4': lambda x: sorted(x.tolist(),reverse=False)})
+    tbl['_c4']=[','.join(map(str, e)) for e in tbl['_c4']] 
+    
+    return tbl
 
 
 def pregunta_12():
@@ -200,7 +229,13 @@ def pregunta_12():
     38   38                    eee:0,fff:9,iii:2
     39   39                    ggg:3,hhh:8,jjj:5
     """
-    return
+    tbl=pd.DataFrame(tbl2)
+    tbl['_c5']=tbl['_c5a']+':'+tbl['_c5b'].astype(str)
+    tbl=tbl[['_c0','_c5']]
+    tbl=tbl.groupby(['_c0'],as_index=False).agg({'_c5': lambda x: sorted(x.tolist(),reverse=False)})
+    tbl['_c5']=[','.join(map(str, e)) for e in tbl['_c5']]
+
+    return tbl
 
 
 def pregunta_13():
@@ -217,4 +252,8 @@ def pregunta_13():
     E    275
     Name: _c5b, dtype: int64
     """
-    return
+
+    tbl=pd.merge(tbl0,tbl2,left_on='_c0',right_on='_c0',how='outer')
+    tbl=tbl[['_c1','_c5b']]
+    tbl=tbl.groupby(['_c1'])['_c5b'].sum()
+    return tbl
